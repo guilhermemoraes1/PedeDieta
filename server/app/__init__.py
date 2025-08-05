@@ -19,7 +19,7 @@ def create_app():
     from .models import User
 
     with app.app_context():
-        create_database(app)
+        create_database()
 
     app.register_blueprint(auth, url_prefix='/')
 
@@ -33,7 +33,7 @@ def create_app():
 
     return app
 
-def create_database(app):
+def create_database():
     if not path.exists('server/' + DB_NAME):
-        db.create_all(app=app)
+        db.create_all()
         print('Created Database!')

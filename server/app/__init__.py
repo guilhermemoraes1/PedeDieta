@@ -15,6 +15,7 @@ def create_app():
 
     CORS(app, supports_credentials=True)
 
+    from .api_gemini import api_gemini
     from .auth import auth
     from .models import User
 
@@ -22,6 +23,7 @@ def create_app():
         create_database()
 
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(api_gemini, url_prefix='/')
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'

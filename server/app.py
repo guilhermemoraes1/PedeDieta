@@ -1,6 +1,22 @@
-from app import create_app
+from helpers.application import app, api
+from helpers.CORS import cors
 
-app = create_app()
+from helpers.database import db
 
-if __name__ == '__main__':
-    app.run(debug=True)
+from resources.UsuarioResource import UsuarioResource, UsuariosResource
+from resources.NutricionistaResource import NutricionistaResource, NutricionistasResource
+from resources.DietaResource import DietaResource, DietasResource
+
+cors.init_app(app)
+
+api.add_resource(UsuarioResource, '/usuarios')
+api.add_resource(UsuariosResource, '/usuarios/<int:id>')
+
+api.add_resource(NutricionistaResource, '/nutricionistas')
+api.add_resource(NutricionistasResource, '/nutricionistas/<int:id>')
+
+api.add_resource(DietaResource, '/dietas')
+api.add_resource(DietasResource, '/dietas/<int:id>')
+
+with app.app_context():
+    db.create_all()

@@ -1,4 +1,4 @@
-<!--
+/*!
   _   _  ___  ____  ___ ________  _   _   _   _ ___   
  | | | |/ _ \|  _ \|_ _|__  / _ \| \ | | | | | |_ _| 
  | |_| | | | | |_) || |  / / | | |  \| | | | | || | 
@@ -18,22 +18,25 @@
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
--->
+*/
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <title itemprop="name">Sistema de Dietas</title>
-    <!-- Manifest and apple icon -->
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
-</html>
+// Chakra imports
+import { Box, SimpleGrid } from "@chakra-ui/react";
+import NutriTable from "views/admin/nuticionista/components/NutriTable";
+import React from "react";
+
+export default function Settings() {
+  // Chakra Color Mode
+  return (
+    <>
+      <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
+        <SimpleGrid
+          mb='20px'
+          columns={{ sm: 1, md: 1 }}
+          spacing={{ base: "20px", xl: "20px" }}>
+          <NutriTable />
+        </SimpleGrid>
+      </Box>    
+    </>
+  );
+}

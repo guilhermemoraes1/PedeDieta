@@ -1,34 +1,29 @@
-import NavBar from "./components/Navbar";
+import './assets/css/App.css';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import {} from 'react-router-dom';
+import AdminLayout from './layouts/admin';
 import {
-    BrowserRouter,
-    Routes,
-    Route
-} from 'react-router-dom'
-import SignUpPage from "./components/SingUp";
-import LoginPage from "./components/Login";
-import HomePage from "./components/Home";
-import './styles/main.css';
-import DietaPage from "./components/DietaPage";
-import GuestPage from "./components/GuestPage";
-import { AuthProvider } from './context/AuthContext'; 
+  ChakraProvider,
+  // extendTheme
+} from '@chakra-ui/react';
+import initialTheme from './theme/theme'; //  { themeGreen }
+import { useState } from 'react';
+// Chakra imports
 
-const App = () => {
-    return (
-        <AuthProvider>
-            <BrowserRouter>
-                <div>
-                    <NavBar/>
-                    <Routes>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="/signup" element={<SignUpPage />} />
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/dieta" element={<DietaPage />} />
-                        <Route path="/guestPage" element={<GuestPage />} />
-                    </Routes>
-                </div>
-            </BrowserRouter>
-        </AuthProvider>
-    )
+export default function Main() {
+  // eslint-disable-next-line
+  const [currentTheme, setCurrentTheme] = useState(initialTheme);
+  return (
+    <ChakraProvider theme={currentTheme}>
+      <Routes>
+        <Route
+          path="admin/*"
+          element={
+            <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
+          }
+        />
+        <Route path="/" element={<Navigate to="/admin" replace />} />
+      </Routes>
+    </ChakraProvider>
+  );
 }
-
-export default App;

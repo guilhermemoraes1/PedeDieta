@@ -6,6 +6,9 @@ import {
   MdPerson,
   MdHome,
 } from 'react-icons/md';
+import { FaUsers } from "react-icons/fa6";
+import { GiMeal } from "react-icons/gi";
+import { MdCalculate } from "react-icons/md";
 
 // Admin Imports
 import Usuario from 'views/admin/usuario';
@@ -25,7 +28,7 @@ const routes = [
   {
     name: 'Tabela Usuários',
     layout: '/admin',
-    icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
+    icon: <Icon as={FaUsers} width="20px" height="20px" color="inherit" />,
     path: '/usuario',
     component: <Usuario />,
   },
@@ -40,14 +43,14 @@ const routes = [
     name: 'Tabela Dietas',
     layout: '/admin',
     path: '/dieta',
-    icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
+    icon: <Icon as={GiMeal} width="20px" height="20px" color="inherit" />,
     component: <Dieta />,
   },
   {
-    name: 'Calculo Nutricional',
+    name: 'Cálculo Nutricional',
     layout: '/admin',
     path: '/calculoNutricional',
-    icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
+    icon: <Icon as={MdCalculate} width="20px" height="20px" color="inherit" />,
     component: <CalculoNutricional />,
   },
 ];

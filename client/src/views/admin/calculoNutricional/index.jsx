@@ -11,7 +11,7 @@ export default function Settings() {
 
     return (
     <>
-        <Box 
+        {/* <Box 
             bg={cardBg}
             p={6}
             rounded="lg"
@@ -20,6 +20,11 @@ export default function Settings() {
             pt={{ base: "130px", md: "80px", xl: "80px" }}
         >
             Calcule o seu gasto calórico diário
+            
+        </Box> */}
+        <Box
+            pt={{ base: "130px", md: "80px", xl: "80px" }}
+        >
             <FormNutricional />
         </Box>
     </>

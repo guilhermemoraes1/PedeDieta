@@ -6,6 +6,8 @@ from helpers.database import db
 from resources.UsuarioResource import UsuarioResource, UsuariosResource
 from resources.NutricionistaResource import NutricionistaResource, NutricionistasResource
 from resources.DietaResource import DietaResource, DietasResource
+from resources.CalculoNutricionalResource import CalculoNutricionalResource
+
 
 cors.init_app(app)
 
@@ -17,6 +19,8 @@ api.add_resource(NutricionistasResource, '/nutricionistas/<int:id>')
 
 api.add_resource(DietaResource, '/dietas')
 api.add_resource(DietasResource, '/dietas/<int:id>')
+
+api.add_resource(CalculoNutricionalResource, '/calculo')
 
 with app.app_context():
     db.create_all()

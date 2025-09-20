@@ -11,13 +11,25 @@ import {
   Stack,
   Radio,
   RadioGroup,
-  Select
+  Select,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure
 } from "@chakra-ui/react";
 import { Form, Field, Formik } from "formik";
+import { useState } from "react";
 import * as Yup from "yup";
+import axios from "axios";
 
 export default function FormNutricional() {
   const cardBg = useColorModeValue('white', 'navy.700'); // mesma cor escura usada em Card
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [resultado, setResultado] = useState(null);
 
   const validationSchema = Yup.object({
     idade: Yup.number()
@@ -28,22 +40,45 @@ export default function FormNutricional() {
       .required("Peso é obrigatório"),
     altura: Yup.number()
       .typeError("Altura deve ser um número")
-      .required("Altura é obrigatória")
+      .required("Altura é obrigatória"),
+    sexo: Yup.string()
+      .oneOf(["masculino", "feminino"], "Selecione um sexo válido")
+      .required("Sexo é obrigatório"),
+    atividadeFisica: Yup.string()
+      .oneOf(["sedentario", "leve", "moderada", "intensa"], "Selecione um nível de atividade válido")
+      .required("Atividade física é obrigatória"),
+    objetivo: Yup.string()
+      .oneOf(["perder", "manter", "ganhar"], "Selecione um objetivo válido")
+      .required("Objetivo é obrigatório")
   });
+
 
   const initialValues = {
     idade: "",
     peso: "",
-    altura: ""
+    altura: "",
+    sexo: "",
+    atividadeFisica: "",
+    objetivo: ""
   };
 
-  const onSubmit = (values, actions) => {
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2));
-      actions.setSubmitting(false);
+  const onSubmit = async (values, actions) => {
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/calculo", values);
+
+      setResultado(response.data);   // <-- guarda os dados
+      onOpen();                       // <-- abre o modal
+
       actions.resetForm();
-    }, 1000);
+    } catch (error) {
+      console.error("Erro ao enviar os dados:", error);
+      alert("Ocorreu um erro ao enviar o formulário.");
+    } finally {
+      actions.setSubmitting(false);
+    }
   };
+
+
 
   return (
 
@@ -162,6 +197,24 @@ export default function FormNutricional() {
           </Form>
         )}
       </Formik>
+
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Resultado do Cálculo</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            {resultado && (
+              <Box>
+                <Text><strong>Gasto Calórico Diário:</strong> {resultado.gasto_calorico} kcal</Text>
+                <Text><strong>TMB (Taxa Metabólica Basal):</strong> {resultado.tmb} kcal</Text>
+                <Text><strong>Objetivo:</strong> {resultado.objetivo}</Text>
+              </Box>
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
     </Box>
   );
 }

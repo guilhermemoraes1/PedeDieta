@@ -12,6 +12,8 @@ import { Box, Button, FormControl,
     } from "@chakra-ui/react";
 import { Form, Field, Formik } from "formik";
 import * as Yup from 'yup';
+import axios from "axios";
+import toast from 'react-hot-toast';
 
 const schemaDieta = Yup.object().shape({
     calorias_diarias: Yup.string()
@@ -21,7 +23,23 @@ const schemaDieta = Yup.object().shape({
         .required("Campo obrigatório"),
 });
 
-export default function AddModal({  isOpen, onClose, handleSubmit }) {
+export default function AddModal({  isOpen, onClose }) {
+    const handleSubmit = async (values, actions) => {
+        try {
+            const newDieta = { caloria: values.calorias_diarias };
+            const res = await axios.post('http://127.0.0.1:5000/gemini', newDieta);
+            if (res.status === 201 || res.status === 200) {
+            toast.success('Dieta cadastrada!');
+            onClose(); // fechar modal só se sucesso
+            }
+        } catch (err) {
+            toast.error('Erro ao cadastrar dieta.');
+        } finally {
+            actions.setSubmitting(false);
+        }
+    };
+
+
   return (
     <Modal 
         isOpen={isOpen} 
@@ -36,14 +54,9 @@ export default function AddModal({  isOpen, onClose, handleSubmit }) {
         <ModalBody pb={6}>
 
             <Formik
-            initialValues={{ 
-                calorias_diarias: '', 
-            }}
+            initialValues={{ calorias_diarias: '' }}
             validationSchema={schemaDieta}
-            onSubmit={(values, actions) => {
-                handleSubmit(values,actions)
-                onClose()     
-            }}
+            onSubmit={handleSubmit}
             >
             {(props) => (
                 <Form>

@@ -7,9 +7,11 @@ from resources.UsuarioResource import UsuarioResource, UsuariosResource
 from resources.NutricionistaResource import NutricionistaResource, NutricionistasResource
 from resources.DietaResource import DietaResource, DietasResource
 from resources.CalculoNutricionalResource import CalculoNutricionalResource
-
+from resources.GeminiResource import GeminiResource
 
 cors.init_app(app)
+
+api.add_resource(GeminiResource, '/gemini')
 
 api.add_resource(UsuarioResource, '/usuarios')
 api.add_resource(UsuariosResource, '/usuarios/<int:id>')

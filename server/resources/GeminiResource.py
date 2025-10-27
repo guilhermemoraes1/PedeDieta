@@ -14,19 +14,16 @@ def prompt_sem_parametro():
 
 def prompt_com_parametro(caloria):
     prompt_text = f"""
-    Me dê 3 sugestões de dieta com café da manhã, almoço e jantar, utilizando alimentos específicos e informando a quantidade aproximada de calorias de cada refeição. Cada sugestão deve totalizar exatamente {caloria} calorias, somando as três refeições. Apresente as respostas seguindo o seguinte formato fixo:
-    Sugestão 1:
-    Café da manhã:
-    Almoço:
-    Jantar:
-    Sugestão 2:
-    Café da manhã:
-    Almoço:
-    Jantar:
-    Sugestão 3:
-    Café da manhã:
-    Almoço:
-    Jantar:
+    Me sugira uma dieta com café da manhã, almoço e jantar, utilizando alimentos específicos e informando a quantidade aproximada de calorias de cada refeição. As refeições juntas devem totalizar exatamente {caloria} calorias. Apresente as respostas seguindo o seguinte formato fixo:
+
+    Café da manhã: Total: calorias.
+
+    Almoço: Total: calorias.
+
+    Jantar: Total: calorias.
+
+    Dieta de {caloria} calorias.
+
     Use texto corrido e direto, sem listas, sem Markdown, sem marcação de texto, sem negrito, sem introduções ou explicações adicionais.
     """
     return test_gemini_api_simplificado(prompt_text)

@@ -53,7 +53,7 @@ const routes = [
   {
     name: 'Cálculo Nutricional',
     layout: '/admin',
-    path: '/calculoNutricional',
+    path: '/calculo-nutricional',
     icon: <Icon as={MdCalculate} width="20px" height="20px" color="inherit" />,
     component: <CalculoNutricional />,
   },

@@ -1,7 +1,6 @@
 import { Box, Container, VStack } from '@chakra-ui/react';
 import Hero from './Hero';
 import AboutSection from './AboutSection';
-import DevSection from './DevSection';
 
 export default function LandingPage() {
   return (
@@ -9,7 +8,6 @@ export default function LandingPage() {
         <VStack spacing={12}>
           <Hero />
           <AboutSection />
-          <DevSection />
         </VStack>
       </Container>
   );

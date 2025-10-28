@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
 import {
-  MdBarChart,
   MdPerson,
   MdHome,
+  MdLock
 } from 'react-icons/md';
 import { FaUsers } from "react-icons/fa6";
 import { GiMeal } from "react-icons/gi";
@@ -16,6 +16,10 @@ import Nutricionista from 'views/admin/nuticionista'
 import Dieta from 'views/admin/dieta';
 import Landing from 'views/admin/landing';
 import CalculoNutricional from 'views/admin/calculoNutricional';
+
+// Auth Imports
+import SignInCentered from 'views/auth/signIn';
+import SignUpCentered from 'views/auth/signUp';
 
 const routes = [
   {
@@ -52,6 +56,20 @@ const routes = [
     path: '/calculoNutricional',
     icon: <Icon as={MdCalculate} width="20px" height="20px" color="inherit" />,
     component: <CalculoNutricional />,
+  },
+  {
+    name: 'Sign In',
+    layout: '/auth',
+    path: '/sign-in',
+    icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
+    component: <SignInCentered />,
+  },
+  {
+    name: 'Sign Up',
+    layout: '/auth',
+    path: '/sign-up',
+    icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
+    component: <SignUpCentered />,
   },
 ];
 

@@ -1,4 +1,6 @@
 from flask_cors import CORS
-from helpers.application import app
 
-cors = CORS(resources={r"/*": {"origins": "*"}})
+cors = CORS()
+
+def init_app(app):
+    cors.init_app(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)

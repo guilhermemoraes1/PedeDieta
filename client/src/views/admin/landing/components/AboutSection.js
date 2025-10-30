@@ -17,7 +17,7 @@ export default function AboutSection() {
         Sobre o Projeto
       </Heading>
       <Text fontSize="md" color={textColor}>
-        A plataforma permite cadastrar, listar, editar e remover Dietas e Usuários.
+        A plataforma permite calcular automaticamente a meta calórica diária de um usuário com base em seu perfil e gerar dietas personalizadas utilizando a API do Gemini, permitindo que o usuário salve, visualize e gerencie suas dietas de forma prática.
       </Text>
     </Box>
   );

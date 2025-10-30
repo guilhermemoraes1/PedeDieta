@@ -21,7 +21,7 @@
 
 */
 
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 // Chakra imports
 import {
@@ -47,6 +47,7 @@ import illustration from "assets/img/auth/auth.png";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
+import axios from "axios";
 
 function SignIn() {
   // Chakra color mode
@@ -65,8 +66,27 @@ function SignIn() {
     { bg: "secondaryGray.300" },
     { bg: "whiteAlpha.200" }
   );
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const handleClick = () => setShow(!show);
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/auth/login", 
+        { email, password },
+        { withCredentials: true }
+    );
+
+      console.log("Resposta do servidor:", response.data);
+      alert("Login realizado com sucesso!");
+      // Redirecionar ou salvar token aqui
+
+    } catch (error) {
+      console.error("Erro no login:", error.response?.data || error.message);
+    }
+  };
+
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
       <Flex
@@ -147,6 +167,8 @@ function SignIn() {
               mb='24px'
               fontWeight='500'
               size='lg'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)} 
             />
             <FormLabel
               ms='4px'
@@ -165,6 +187,9 @@ function SignIn() {
                 size='lg'
                 type={show ? "text" : "password"}
                 variant='auth'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                
               />
               <InputRightElement display='flex' alignItems='center' mt='4px'>
                 <Icon
@@ -207,7 +232,8 @@ function SignIn() {
               fontWeight='500'
               w='100%'
               h='50'
-              mb='24px'>
+              mb='24px'
+              onClick={handleSubmit} >
               Sign In
             </Button>
           </FormControl>

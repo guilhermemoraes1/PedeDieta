@@ -1,18 +1,8 @@
-from flask_restful import fields as flaskFields
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, ForeignKey
 from marshmallow import Schema, fields, validate
 
-from models.Pessoa import Pessoa, pessoa_fields
-
-usuario_fields = {
-    "id": flaskFields.Integer,
-    "nome": flaskFields.String,
-    "email": flaskFields.String,
-    "nutricionista": flaskFields.Nested({
-        "crn":flaskFields.String
-    })
-}
+from models.Pessoa import Pessoa
 
 class Usuario(Pessoa):
     __tablename__ = 'tb_usuarios'

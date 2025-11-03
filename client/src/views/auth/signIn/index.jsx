@@ -22,7 +22,7 @@
 */
 
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 // Chakra imports
 import {
   Box,
@@ -69,23 +69,42 @@ function SignIn() {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const handleClick = () => setShow(!show);
 
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+
   const handleSubmit = async () => {
+    setLoading(true);
+    setErrorMessage(""); 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/auth/login", 
+      const response = await axios.post(
+        "http://127.0.0.1:5000/auth/login",
         { email, password },
         { withCredentials: true }
-    );
+      );
 
-      console.log("Resposta do servidor:", response.data);
-      alert("Login realizado com sucesso!");
-      // Redirecionar ou salvar token aqui
-
+      // Se login for bem-sucedido
+      navigate("/admin/landing");
     } catch (error) {
-      console.error("Erro no login:", error.response?.data || error.message);
+      if (!error.response) {
+        // Erro de rede / servidor inacessível
+        setErrorMessage("Não foi possível conectar ao servidor. Tente novamente mais tarde.");
+      } else if (error.response.status === 401) {
+        // Usuário ou senha inválidos
+        setErrorMessage("E-mail ou senha incorretos.");
+      } else if (error.response.status === 400) {
+        setErrorMessage("Por favor, preencha todos os campos corretamente.");
+      } else {
+        // Outros erros
+        setErrorMessage(error.response.data?.message || "Erro inesperado ao fazer login.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
+
 
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
@@ -226,6 +245,11 @@ function SignIn() {
                 </Text>
               </NavLink>
             </Flex>
+            {errorMessage && (
+              <Text color="red.500" fontSize="sm" mb="4">
+                {errorMessage}
+              </Text>
+            )}
             <Button
               fontSize='sm'
               variant='brand'
@@ -233,7 +257,8 @@ function SignIn() {
               w='100%'
               h='50'
               mb='24px'
-              onClick={handleSubmit} >
+              onClick={handleSubmit} 
+              isLoading={loading}>
               Sign In
             </Button>
           </FormControl>

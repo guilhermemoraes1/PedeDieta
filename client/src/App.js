@@ -9,7 +9,8 @@ import {
 } from '@chakra-ui/react';
 import initialTheme from './theme/theme'; //  { themeGreen }
 import { useState } from 'react';
-// Chakra imports
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+
 
 export default function Main() {
   // eslint-disable-next-line
@@ -21,7 +22,9 @@ export default function Main() {
         <Route
           path="admin/*"
           element={
-            <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
+            <ProtectedRoute>
+              <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
+            </ProtectedRoute>
           }
         />
         <Route path="/" element={<Navigate to="/admin" replace />} />

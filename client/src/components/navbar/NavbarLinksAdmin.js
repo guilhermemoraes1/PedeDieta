@@ -12,20 +12,27 @@ import {
   Text,
   useColorModeValue,
   useColorMode,
+  useToast
 } from '@chakra-ui/react';
 // Custom Components
 import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState }  from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // Assets
 import { MdNotificationsNone, MdInfoOutline } from 'react-icons/md';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { FaEthereum } from 'react-icons/fa';
 import routes from 'routes';
+
 export default function HeaderLinks(props) {
   const { secondary } = props;
   const { colorMode, toggleColorMode } = useColorMode();
   // Chakra Color Mode
+  const toast = useToast();
+  const navigate = useNavigate();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navbarIcon = useColorModeValue('gray.400', 'white');
   let menuBg = useColorModeValue('white', 'navy.800');
   const textColor = useColorModeValue('secondaryGray.900', 'white');
@@ -39,6 +46,37 @@ export default function HeaderLinks(props) {
     '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
   );
   const borderButton = useColorModeValue('secondaryGray.500', 'whiteAlpha.200');
+
+    const handleLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+      await axios.post("http://127.0.0.1:5000/auth/logout", {}, { withCredentials: true });
+
+      toast({
+        title: "Logout realizado.",
+        description: "Você saiu da aplicação com sucesso.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+
+      // Limpar estado do usuário aqui, se necessário
+      // setUser(null);
+
+      navigate("/auth/sign-in"); // <--- redireciona para a tela de SignIn
+    } catch (error) {
+      console.error("Erro ao sair:", error.response || error);
+      toast({
+        title: "Erro ao sair.",
+        description: error.response?.data?.message || error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      setIsLoggingOut(false);
+    }
+  };
+
   return (
     <Flex
       w={{ sm: '100%', md: 'auto' }}
@@ -132,24 +170,6 @@ export default function HeaderLinks(props) {
             </Text>
           </Flex>
           <Flex flexDirection="column">
-            {/* <MenuItem
-              _hover={{ bg: 'none' }}
-              _focus={{ bg: 'none' }}
-              px="0"
-              borderRadius="8px"
-              mb="10px"
-            >
-              <ItemContent info="Horizon UI Dashboard PRO" />
-            </MenuItem>
-            <MenuItem
-              _hover={{ bg: 'none' }}
-              _focus={{ bg: 'none' }}
-              px="0"
-              borderRadius="8px"
-              mb="10px"
-            >
-              <ItemContent info="Horizon Design System Free" />
-            </MenuItem> */}
           </Flex>
         </MenuList>
       </Menu>
@@ -176,13 +196,7 @@ export default function HeaderLinks(props) {
           minW={{ base: 'unset' }}
           maxW={{ base: '360px', md: 'unset' }}
         >
-          {/* <Image src={navImage} borderRadius="16px" mb="28px" /> */}
           <Flex flexDirection="column">
-            {/* <Link w="100%" href="https://horizon-ui.com/pro">
-              <Button w="100%" h="44px" mb="10px" variant="brand">
-                Buy Horizon UI PRO
-              </Button>
-            </Link>  */}
             <Link
               w="100%"
               href="https://github.com/guilhermemoraes1/sistema-de-dietas-front"
@@ -198,20 +212,6 @@ export default function HeaderLinks(props) {
                 Ver Documentação
               </Button>
             </Link>
-            {/* <Link
-              w="100%"
-              href="https://github.com/horizon-ui/horizon-ui-chakra-ts"
-            >
-              <Button
-                w="100%"
-                h="44px"
-                variant="no-hover"
-                color={textColor}
-                bg="transparent"
-              >
-                Try Horizon Free
-              </Button>
-            </Link> */}
           </Flex>
         </MenuList>
       </Menu>
@@ -270,39 +270,30 @@ export default function HeaderLinks(props) {
             </Text>
           </Flex>
           <Flex flexDirection="column" p="10px">
-  <MenuItem
-    as="a"
-    href="/admin/dieta"
-    _hover={{ bg: 'none' }}
-    _focus={{ bg: 'none' }}
-    borderRadius="8px"
-    px="14px"
-  >
-    <Text fontSize="sm">Tabela de Dietas</Text>
-  </MenuItem>
+            <MenuItem
+              as="a"
+              href=""
+              _hover={{ bg: 'none' }}
+              _focus={{ bg: 'none' }}
+              borderRadius="8px"
+              px="14px"
+              onClick={handleLogout}
+              isDisabled={isLoggingOut}
+            >
+              <Text fontSize="sm">Sair da aplicação</Text>
+            </MenuItem>
 
-  <MenuItem
-    as="a"
-    href="/admin/nutricionista"
-    _hover={{ bg: 'none' }}
-    _focus={{ bg: 'none' }}
-    borderRadius="8px"
-    px="14px"
-  >
-    <Text fontSize="sm">Tabela de Nutricionistas</Text>
-  </MenuItem>
-
-  <MenuItem
-    as="a"
-    href="/admin/landing"
-    _hover={{ bg: 'none' }}
-    _focus={{ bg: 'none' }}
-    borderRadius="8px"
-    px="14px"
-  >
-    <Text fontSize="sm">Land Page</Text>
-  </MenuItem>
-</Flex>
+            <MenuItem
+              as="a"
+              href="/admin/landing"
+              _hover={{ bg: 'none' }}
+              _focus={{ bg: 'none' }}
+              borderRadius="8px"
+              px="14px"
+            >
+              <Text fontSize="sm">Land Page</Text>
+            </MenuItem>
+          </Flex>
 
         </MenuList>
       </Menu>

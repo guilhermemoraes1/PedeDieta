@@ -13,6 +13,8 @@ class AuthLoginResource(Resource):
         pessoa = Pessoa.query.filter_by(email=email, password=password).first()
         if not pessoa:
             return {"message": "Email ou senha incorretos"}, 401
+        
+        login_user(pessoa, remember=True)
 
         return {"message": "Login realizado com sucesso!", "user": {"id": pessoa.id, "nome": pessoa.nome, "email": pessoa.email}}   
 

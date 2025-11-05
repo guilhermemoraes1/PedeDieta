@@ -17,7 +17,7 @@ import {
 // Custom Components
 import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import PropTypes from 'prop-types';
-import React, { useState }  from 'react';
+import React, { useState, useEffect }  from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // Assets
@@ -29,6 +29,7 @@ import routes from 'routes';
 export default function HeaderLinks(props) {
   const { secondary } = props;
   const { colorMode, toggleColorMode } = useColorMode();
+  const [userName, setUserName] = useState("Usuário");
   // Chakra Color Mode
   const toast = useToast();
   const navigate = useNavigate();
@@ -47,7 +48,29 @@ export default function HeaderLinks(props) {
   );
   const borderButton = useColorModeValue('secondaryGray.500', 'whiteAlpha.200');
 
-    const handleLogout = async () => {
+  useEffect(() => {
+    const fetchUserStatus = async () => {
+      try {
+        // Chamada para o novo endpoint /auth/status (que já existe no seu Flask)
+        const response = await axios.get("http://127.0.0.1:5000/auth/status", { withCredentials: true });
+        
+        if (response.data.authenticated) {
+          // Atualiza o estado com o nome retornado pelo backend
+          setUserName(response.data.user.nome);
+        } else {
+          // Opcional: Se não estiver autenticado, redireciona para o login
+          // navigate("/auth/sign-in"); 
+        }
+      } catch (error) {
+        // Erro de rede ou servidor
+        console.error("Falha ao buscar status do usuário:", error);
+      }
+    };
+
+    fetchUserStatus();
+  }, [])
+
+  const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
       await axios.post("http://127.0.0.1:5000/auth/logout", {}, { withCredentials: true });
@@ -266,7 +289,7 @@ export default function HeaderLinks(props) {
               fontWeight="700"
               color={textColor}
             >
-              👋&nbsp; Hey, usuário
+              👋&nbsp; Bem-vindo {userName}
             </Text>
           </Flex>
           <Flex flexDirection="column" p="10px">
